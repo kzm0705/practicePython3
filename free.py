@@ -1,5 +1,7 @@
 import os
-first = ''
+from datetime import timedelta,datetime
 
-if not first:
-    print('x')
+
+time = datetime.now()
+
+elapsed_time = datetime.now() - time
