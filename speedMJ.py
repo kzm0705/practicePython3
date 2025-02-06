@@ -11,7 +11,7 @@ images =['manz (1).png', 'manz (2).png', 'manz (3).png', 'manz (4).png', 'manz (
 
 first,first_key = "",""
 second = ""
-count = 0
+count = 16
 countdown = 3
 elapsed_time =timedelta(0)
 running = True
@@ -33,7 +33,7 @@ def main():
 
     window = sg.Window('麻雀スピード', layout, size=(600,600),element_justification='center')
     while True:
-        event, values = window.read(timeout=30)
+        event, values = window.read(timeout=20)
 
         if event == sg.WINDOW_CLOSED:
             break
@@ -47,6 +47,8 @@ def main():
             #二枚目選択時
             else:
                 second = window[event].Filename
+                if first_key == window[event].key:
+                    continue
                 count, second, result = check(first,second)
                 if result:
                     window[first_key].update("")
@@ -61,10 +63,26 @@ def main():
             countdown = 3
             for i in range(3):
                 countdown -= 1
-                time.sleep(1)
+                time.sleep(1) 
                 window['countdown'].update(str(countdown))
             start_time = datetime.now()
             count = 16
+
+        #newgame
+        if event == 'new':
+            count = 16
+            random_hi = get_image(images)
+            shuffle_hi = sample(random_hi, len(random_hi))
+            shuffle_hi_2 = sample(random_hi, len(random_hi))
+            for i in range(8):
+                window[f'row1{i}'].update(filename=shuffle_hi[i])
+                window[f'row2{i}'].update(filename=shuffle_hi[i+8])
+                window[f'row3{i}'].update(filename=shuffle_hi_2[i])
+                window[f'row4{i}'].update(filename=shuffle_hi_2[i+8])
+            start_time = datetime.now()
+
+
+
             
         #タイマーの処理
         if count != 0:
